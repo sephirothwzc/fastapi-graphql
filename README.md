@@ -80,4 +80,22 @@ $ pre-commit install
 # 扩展 安装 brew install pyenv 设置 全局python 版本
 # 数据库orm
 $ poetry add "tortoise-orm[asyncmy]"
+# 设置环境变量
+$ poetry add python-dotenv
+# 增加设置类型约束
+$ poetry add pydantic-settings
+
+```
+
+- 设置制表符使用空格缩进采用4个空格 settings.json 设置 保证注释的生成
+
+```json
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none",
+    "editor.detectIndentation": false,
+    "editor.tabSize": 4,
+}
 ```

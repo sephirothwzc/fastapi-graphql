@@ -11,6 +11,9 @@ fastapi = "^0.101.1"
 uvicorn = { extras = ["standard"], version = "^0.23.2" }
 pydantic = "^2.2.1"
 tortoise-orm = { extras = ["asyncmy"], version = "^0.20.0" }
+aerich = "^0.7.2"
+python-dotenv = "^1.0.0"
+pydantic-settings = "^2.0.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -25,20 +28,22 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 select = [
-  "E",   # pycodestyle error
-  "W",   # pycodestyle warning
-  "F",   # pyflakes
-  "A",   # flakes8-builtins
-  "COM", # flakes8-commas
-  "C4",  # flake8-comprehensions
-  "Q",   # flake8-quotes
-  "SIM", # flake8-simplify
-  "PTH", # flake8-use-pathlib
-  "I",   # isort
-  "N",   # pep8 naming
-  "UP",  # pyupgrade  
-  "S",   # bandit
+    "E",   # pycodestyle error
+    "W",   # pycodestyle warning
+    "F",   # pyflakes
+    "A",   # flakes8-builtins
+    "COM", # flakes8-commas
+    "C4",  # flake8-comprehensions
+    "Q",   # flake8-quotes
+    "SIM", # flake8-simplify
+    "PTH", # flake8-use-pathlib
+    #   "I",   # isort
+    "N",  # pep8 naming
+    "UP", # pyupgrade  
+    "S",  # bandit
 ]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
+version = "1.0.2"
+tag_format = "$version"
