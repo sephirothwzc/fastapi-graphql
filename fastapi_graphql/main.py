@@ -3,6 +3,7 @@ from tortoise.contrib.fastapi import register_tortoise
 from fastapi import FastAPI
 
 from fastapi_graphql.config.env_setting import settings
+from fastapi_graphql.controller import auth
 from fastapi_graphql.orm.db import do_stuff, init
 
 from .model.vo import HelloWord
@@ -28,6 +29,8 @@ register_tortoise(
 #         "admin_email": settings.admin_email,
 #         "items_per_user": settings.items_per_user,
 #     }
+
+app.include_router(auth.routers, prefix="/auth")
 
 
 # region app event
