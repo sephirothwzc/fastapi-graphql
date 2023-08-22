@@ -22,6 +22,11 @@ ruff = "*"
 pre-commit = "^3.3.3"
 commitizen = "^3.6.0"
 
+
+[tool.aerich]
+tortoise_orm = "fastapi_graphql.config.env_setting.TORTOISE_ORM"
+location = "./migrations"
+src_folder = "./."
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

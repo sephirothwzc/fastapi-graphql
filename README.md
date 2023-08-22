@@ -99,3 +99,24 @@ $ poetry add pydantic-settings
     "editor.tabSize": 4,
 }
 ```
+
+- 数据迁移方案 aerich
+
+```python
+TORTOISE_ORM = {
+    "connections": {"default": settings.orm_db_url},
+    "apps": {
+        "models": {
+            "models": ["fastapi_graphql.model.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}
+```
+
+```shell
+# 根据配置init
+$ aerich init -t fastapi_graphql.config.env_setting.TORTOISE_ORM
+# 生成sql
+$ aerich init-db
+```

@@ -34,3 +34,13 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+TORTOISE_ORM = {
+    "connections": {"default": settings.orm_db_url},
+    "apps": {
+        "models": {
+            "models": ["fastapi_graphql.model.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}
