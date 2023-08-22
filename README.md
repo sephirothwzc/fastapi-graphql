@@ -45,10 +45,10 @@ $ pip3 install -r requirements.txt
 $ brew install poetry
 # or 
 $ brew install --build-from-source poetry
-# 创建项目 --src单独目录 可以取消
-$ poetry new --src python-fastapi-graphql
+# 创建项目 --src单独目录 可以取消 $  poetry new --src python-fastapi-graphql
+$ poetry new fastapi-graphql
 # 目录跳转
-$ cd python-fastapi-graphql
+$ cd fastapi-graphql
 # vscode 打开
 $ code .
 # git
@@ -68,14 +68,14 @@ $ poetry add black='*' --dev
 # * linting with ruff (目前无法使用 只能用 pip3 install ruff)
 $ poetry add ruff='*' --dev  
 # 运行 (创建 main.py)
-$ uvicorn src.python_fastapi_graphql.main:app --reload    
+$ uvicorn fastapi_graphql.main:app --reload    
 # 模型类
 $ poetry add pydantic
 # pre-commit hooks
 $ poetry add pre-commit --dev
 # * commitizen 目前有问题不能使用
 $ poetry add commitizen --dev
-# pre-commit install 激活.git hooks
+# pre-commit install 激活.git hooks 创建文件 .pre-commit-config.yaml
 $ pre-commit install
 # 扩展 安装 brew install pyenv 设置 全局python 版本
 # 数据库orm
