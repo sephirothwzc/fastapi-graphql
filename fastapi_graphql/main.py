@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi_graphql.config.env_setting import settings
 from fastapi_graphql.controller import auth
 from fastapi_graphql.orm.db import do_stuff, init
+from fastapi_graphql.controller import graphql_router
 
 from .model.vo import HelloWord
 
@@ -30,7 +31,10 @@ register_tortoise(
 #         "items_per_user": settings.items_per_user,
 #     }
 
+# region include_router
 app.include_router(auth.routers, prefix="/auth")
+app.include_router(graphql_router.graphql_app, prefix="/graphql")
+# endregion
 
 
 # region app event

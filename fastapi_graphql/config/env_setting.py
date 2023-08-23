@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     port: Optional[int] = None
     items_per_user: int = 50
     orm_db_url: str
+    graphiql: bool = True
 
     class Config:
         """
