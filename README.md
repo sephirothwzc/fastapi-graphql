@@ -117,6 +117,14 @@ TORTOISE_ORM = {
 ```shell
 # 根据配置init
 $ aerich init -t fastapi_graphql.config.env_setting.TORTOISE_ORM
-# 生成sql
-$ aerich init-db
+# 生成sql（执行一次）
+$ aerich init-db 
+# 差分sql（）
+$ aerich migrate
+# 升级到最新版本（执行）
+$ aerich upgrade
+# 显示历史记录
+$ aerich history
+# 降级
+$ aerich downgrade
 ```

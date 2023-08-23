@@ -34,8 +34,8 @@ class User(BaseModel):
 
     table = "user"
     name = fields.CharField(max_length=255, index=True, description="用户名")
-    account = fields.CharField(max_length=255, index=True, description="账号")
-    pwd = fields.CharField(max_length=255, index=True, description="密码")
+    account = fields.CharField(max_length=255, description="账号")
+    pwd = fields.CharField(max_length=255, description="密码")
     collect = fields.TextField(null=True, default="[]", description="用户收藏")
     table_description = "用户表"
 

@@ -9,9 +9,7 @@ async def upgrade(db: BaseDBAsyncClient) -> str:
     `account` VARCHAR(255) NOT NULL  COMMENT '账号',
     `pwd` VARCHAR(255) NOT NULL  COMMENT '密码',
     `collect` LONGTEXT   COMMENT '用户收藏',
-    KEY `idx_user_name_76f409` (`name`),
-    KEY `idx_user_account_80d388` (`account`),
-    KEY `idx_user_pwd_1ac31d` (`pwd`)
+    KEY `idx_user_name_76f409` (`name`)
 ) CHARACTER SET utf8mb4 COMMENT='用户表';
 CREATE TABLE IF NOT EXISTS `aerich` (
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
