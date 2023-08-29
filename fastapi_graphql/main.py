@@ -1,4 +1,5 @@
 # from typing import Union
+import sys
 from tortoise.contrib.fastapi import register_tortoise
 from fastapi import FastAPI
 
@@ -6,6 +7,10 @@ from fastapi_graphql.config.env_setting import settings
 from fastapi_graphql.controller import auth
 from fastapi_graphql.orm.db import do_stuff, init
 from fastapi_graphql.controller import graphql_router
+import logging
+from pygments import highlight
+from pygments.formatters.terminal import TerminalFormatter
+from pygments.lexers.sql import PostgresLexer
 
 from .model.vo import HelloWord
 
@@ -33,7 +38,56 @@ register_tortoise(
 
 # region include_router
 app.include_router(auth.routers, prefix="/auth")
-app.include_router(graphql_router.graphql_app, prefix="/graphql")
+app.include_router(
+    graphql_router.graphql_app,
+    prefix="/graphql",
+)
+# endregion
+
+# region log
+postgres = PostgresLexer()
+terminal_formatter = TerminalFormatter()
+
+
+class PygmentsFormatter(logging.Formatter):
+    def __init__(
+        self,
+        fmt="{asctime} - {name}:{lineno} - {levelname} - {message}",
+        datefmt="%H:%M:%S",
+    ):
+        self.datefmt = datefmt
+        self.fmt = fmt
+        logging.Formatter.__init__(self, None, datefmt)
+
+    def format(self, record: logging.LogRecord):  # noqa: A003
+        """Format the logging record with slq's syntax coloration."""
+        own_records = {
+            attr: val
+            for attr, val in record.__dict__.items()
+            if not attr.startswith("_")
+        }
+        message = record.getMessage()
+        name = record.name
+        asctime = self.formatTime(record, self.datefmt)
+
+        if name == "tortoise.db_client" and (
+            record.levelname == "DEBUG"
+            and not message.startswith("Created connection pool")
+            and not message.startswith("Closed connection pool")
+        ):
+            message = highlight(message, postgres, terminal_formatter).rstrip()
+
+        own_records.update(
+            {
+                "message": message,
+                "name": name,
+                "asctime": asctime,
+            },
+        )
+
+        return self.fmt.format(**own_records)
+
+
 # endregion
 
 
@@ -42,6 +96,22 @@ app.include_router(graphql_router.graphql_app, prefix="/graphql")
 async def startup_event():
     """添加在应用程序启动之前运行初始化数据库"""
     await init()
+    fmt = PygmentsFormatter(
+        fmt="{asctime} - {name}:{lineno} - {levelname} - {message}",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    sh = logging.StreamHandler(sys.stdout)
+    sh.setLevel(logging.DEBUG)
+    sh.setFormatter(fmt)
+
+    # will print debug sql
+    logger_db_client = logging.getLogger("tortoise.db_client")
+    logger_db_client.setLevel(logging.DEBUG)
+    logger_db_client.addHandler(sh)
+
+    # logger_tortoise = logging.getLogger("tortoise")
+    # logger_tortoise.setLevel(logging.DEBUG)
+    # logger_tortoise.addHandler(sh)
 
 
 @app.on_event("shutdown")

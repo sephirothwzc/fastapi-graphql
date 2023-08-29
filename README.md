@@ -128,3 +128,27 @@ $ aerich history
 # 降级
 $ aerich downgrade
 ```
+
+- tortoise-orm log
+
+```py
+import logging
+import sys
+
+@app.on_event("startup")
+async def startup_event():
+    """添加在应用程序启动之前运行初始化数据库"""
+    await init()
+    fmt = logging.Formatter(
+        fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    sh = logging.StreamHandler(sys.stdout)
+    sh.setLevel(logging.DEBUG)
+    sh.setFormatter(fmt)
+
+    # will print debug sql
+    logger_db_client = logging.getLogger("tortoise.db_client")
+    logger_db_client.setLevel(logging.DEBUG)
+    logger_db_client.addHandler(sh)
+```

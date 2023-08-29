@@ -1,7 +1,14 @@
 # models.py
+import strawberry
 from tortoise import fields
 from tortoise.models import Model
 from tortoise.contrib.pydantic import pydantic_model_creator
+from datetime import datetime
+
+from fastapi_graphql.model.snowflake import IdWorker
+
+# 创建一个 雪花id
+worker = IdWorker(1, 2, 0)
 
 
 class BaseModel(Model):
@@ -11,13 +18,39 @@ class BaseModel(Model):
         index=True,
         description="id",
         source_field="id",
+        default=str(worker.get_id()),
     )
-    created_at = fields.DatetimeField(auto_now_add=True, description="创建时间")
-    created_id = fields.CharField(max_length=50, description="创建人")
-    updated_at = fields.DatetimeField(auto_now=True, description="修改时间")
-    updated_id = fields.CharField(max_length=50, description="更新人")
-    business_code = fields.CharField(max_length=255, description="业务编码")
-    db_version = fields.IntField(default=1, description="数据版本")
+    created_at = fields.DatetimeField(
+        null=True,
+        auto_now_add=True,
+        default=datetime.now(),
+        description="创建时间",
+    )
+    created_id = fields.CharField(
+        null=True,
+        default="",
+        max_length=50,
+        description="创建人",
+    )
+    updated_at = fields.DatetimeField(
+        null=True,
+        auto_now=True,
+        default=datetime.now(),
+        description="修改时间",
+    )
+    updated_id = fields.CharField(
+        null=True,
+        default="",
+        max_length=50,
+        description="更新人",
+    )
+    business_code = fields.CharField(
+        null=True,
+        max_length=255,
+        default="",
+        description="业务编码",
+    )
+    db_version = fields.IntField(default=1, null=True, description="数据版本")
 
     def __str__(self):
         return self.name
@@ -42,7 +75,7 @@ class User(BaseModel):
     table = "user"
     name = fields.CharField(max_length=255, index=True, description="用户名")
     account = fields.CharField(max_length=255, description="账号")
-    pwd = fields.CharField(max_length=255, description="密码")
+    pwd = fields.CharField(max_length=255, description="密码", null=True)
     collect = fields.TextField(null=True, default="[]", description="用户收藏")
     table_description = "用户表"
 
@@ -61,6 +94,18 @@ class User(BaseModel):
 
 User_orm = pydantic_model_creator(User, name="User")
 User_in_orm = pydantic_model_creator(User, name="UserIn", exclude_readonly=True)
+
+
+@strawberry.experimental.pydantic.input(model=User_in_orm, all_fields=True)
+class UserInput:
+    pass
+
+
+@strawberry.experimental.pydantic.type(model=User_orm, all_fields=True)
+class UserType:
+    pass
+
+
 # endregion
 
 
