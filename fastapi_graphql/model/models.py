@@ -92,7 +92,7 @@ class User(BaseModel):
         return data
 
 
-User_orm = pydantic_model_creator(User, name="User")
+User_orm = pydantic_model_creator(User, name="UserOrm")
 User_in_orm = pydantic_model_creator(User, name="UserIn", exclude_readonly=True)
 
 

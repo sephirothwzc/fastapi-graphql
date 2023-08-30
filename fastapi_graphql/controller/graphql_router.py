@@ -1,4 +1,5 @@
 # graphql_router.py
+from dataclasses import asdict
 from typing import List, Optional
 import strawberry
 from strawberry.fastapi import GraphQLRouter
@@ -31,11 +32,8 @@ class Query:
 class Mutation:
     @strawberry.mutation
     async def add_user(self, user: UserInput) -> Optional[UserType]:
-        result = await User.create(
-            name=user.name,
-            account=user.account,
-            pwd="123456",  # noqa: S106
-        )
+        user_dict = asdict(user)
+        result = await User.create(**user_dict)
         return await User_orm.from_tortoise_orm(result)
 
 
