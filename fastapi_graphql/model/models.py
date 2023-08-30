@@ -1,4 +1,5 @@
 # models.py
+from typing import Optional
 import strawberry
 from tortoise import fields
 from tortoise.models import Model
@@ -98,6 +99,7 @@ User_in_orm = pydantic_model_creator(User, name="UserIn", exclude_readonly=True)
 
 @strawberry.experimental.pydantic.input(model=User_in_orm, all_fields=True)
 class UserInput:
+    id: Optional[str] = None  # noqa: A003
     pass
 
 

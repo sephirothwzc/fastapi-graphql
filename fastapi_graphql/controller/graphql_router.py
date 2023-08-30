@@ -1,5 +1,4 @@
 # graphql_router.py
-from dataclasses import asdict
 from typing import List, Optional
 import strawberry
 from strawberry.fastapi import GraphQLRouter
@@ -11,6 +10,7 @@ from fastapi_graphql.model.models import (
     UserInput,
     UserType,
 )
+from fastapi_graphql.services.generic_services import UserService
 
 
 @strawberry.type
@@ -29,15 +29,16 @@ class Query:
 
 
 @strawberry.type
-class Mutation:
+class UserMutation:
     @strawberry.mutation
-    async def add_user(self, user: UserInput) -> Optional[UserType]:
-        user_dict = asdict(user)
-        result = await User.create(**user_dict)
-        return await User_orm.from_tortoise_orm(result)
+    def save_user(
+        self,
+        user: UserInput,
+    ) -> Optional[UserType]:
+        return UserService().save_model(user)
 
 
-schema = strawberry.Schema(Query, Mutation)
+schema = strawberry.Schema(Query, UserMutation)
 
 # get:/graphql
 graphql_app = GraphQLRouter(schema, graphiql=settings.graphiql)
