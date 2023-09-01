@@ -1,5 +1,5 @@
 # generic_services.py
-from typing import Optional, Type, TypeVar, Dict
+from typing import List, Optional, Type, TypeVar, Dict
 
 import strawberry
 
@@ -68,6 +68,9 @@ class GenericService:
         """
         return await self.model_type.filter(id=pk_id).delete()
 
+    async def find_all(self, query_wrapper: Dict) -> List[ModelType]:
+        return await self.model_type.all()
+
 
 class UserService(GenericService):
     def __init__(self):
@@ -82,3 +85,11 @@ class UserService(GenericService):
             )
         else:
             return await User_orm.from_tortoise_orm(await self.create_model(data_dict))
+
+    async def find_all_user(self, query_wrapper: Dict) -> List[UserType]:
+        return await User_orm.from_queryset(await self.find_all)
+
+
+# Create a dependency to inject UserService instance
+def get_user_service() -> UserService:
+    return UserService()
