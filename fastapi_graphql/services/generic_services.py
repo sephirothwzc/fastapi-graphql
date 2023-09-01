@@ -56,6 +56,18 @@ class GenericService:
         await self.model_type.filter(id=pk_id).update(**data)
         return self.model_type.get(id=pk_id)
 
+    async def del_model(self, pk_id: str) -> int:
+        """
+        删除model
+
+        Args:
+            pk_id (str): _description_
+
+        Returns:
+            bool: _description_
+        """
+        return await self.model_type.filter(id=pk_id).delete()
+
 
 class UserService(GenericService):
     def __init__(self):
